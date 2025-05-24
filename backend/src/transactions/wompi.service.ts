@@ -23,7 +23,7 @@ export class WompiService {
   }) {
     try {
       // 1. Get acceptance token
-      const acceptanceRes = await axios.get(`${this.wompiUrl}/merchants/${this.publicKey}`);
+      const acceptanceRes = await axios.get<any>(`${this.wompiUrl}/merchants/${this.publicKey}`);
       const acceptanceToken = acceptanceRes.data.data.presigned_acceptance.acceptance_token;
 
       // 2. Create payment source (tokenize card)
