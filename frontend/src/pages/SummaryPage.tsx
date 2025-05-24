@@ -1,18 +1,18 @@
 import { useSelector } from 'react-redux';
 import type { RootState } from '../store';
 import { useNavigate } from 'react-router-dom';
-import { useCreateTransactionMutation } from '../api';
+import { usePayTransactionMutation } from '../api';
 
 export function SummaryPage() {
   const checkout = useSelector((s: RootState) => (s as any).checkout);
   const navigate = useNavigate();
-  const [createTx, { isLoading }] = useCreateTransactionMutation();
+  const [payTransaction, { isLoading }] = usePayTransactionMutation();
 
   // Dummy product info (replace with real product lookup if available in state)
   const product = checkout.product || { name: 'Product', price: checkout.amount || 0 };
 
   const handlePay = async () => {
-    await createTx({
+    await payTransaction({
       productId: checkout.productId,
       customerEmail: checkout.customerEmail,
       customerName: checkout.customerName,

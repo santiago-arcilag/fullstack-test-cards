@@ -11,6 +11,11 @@ export class TransactionController {
     return this.service.create(dto);
   }
 
+  @Post('pay')
+  payWithCard(@Body() dto: CreateTransactionDto) {
+    return this.service.payWithCard(dto);
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return this.service.findOne(Number(id));
