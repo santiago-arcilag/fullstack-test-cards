@@ -10,17 +10,18 @@ export class TransactionService {
     const product = await this.prisma.product.findUnique({ where: { id: dto.productId } });
     if (!product) throw new InternalServerErrorException('Product not found');
 
+    const customer = await this.prisma.customer.upsert({
+      where: { email: dto.customerEmail },
+      update: { name: dto.customerName },
+      create: { email: dto.customerEmail, name: dto.customerName },
+    });
+
     const transaction = await this.prisma.transaction.create({
       data: {
         productId: dto.productId,
+        customerId: customer.id,
         amount: product.price,
         status: 'PENDING',
-        customer: {
-          connectOrCreate: {
-            where: { email: dto.customerEmail },
-            create: { email: dto.customerEmail, name: dto.customerName },
-          },
-        },
       },
     });
 
