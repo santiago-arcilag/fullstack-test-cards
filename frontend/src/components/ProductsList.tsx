@@ -1,4 +1,5 @@
 import { useGetProductsQuery } from '../api';
+import { Link } from 'react-router-dom';
 
 export function ProductsList() {
   const { data: products, isLoading, error } = useGetProductsQuery(undefined);
@@ -10,7 +11,9 @@ export function ProductsList() {
     <ul>
       {products?.map((p: any) => (
         <li key={p.id}>
-          <strong>{p.name}</strong> — ${p.price} ({p.stock} in stock)
+          <Link to={`/checkout/${p.id}`}>
+            <strong>{p.name}</strong> — ${p.price} ({p.stock} in stock)
+          </Link>
         </li>
       ))}
     </ul>

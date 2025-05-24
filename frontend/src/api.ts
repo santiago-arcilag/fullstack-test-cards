@@ -11,7 +11,14 @@ export const api = createApi({
       query: () => '/products',
       providesTags: ['Products'],
     }),
+    createTransaction: builder.mutation({
+      query: (body) => ({
+        url: '/transactions',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useGetProductsQuery } = api; 
+export const { useGetProductsQuery, useCreateTransactionMutation } = api; 
