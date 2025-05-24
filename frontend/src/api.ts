@@ -18,7 +18,10 @@ export const api = createApi({
         body,
       }),
     }),
+    getTransaction: builder.query({
+      query: (id) => `/transactions/${id}`,
+    }),
   }),
 });
 
-export const { useGetProductsQuery, useCreateTransactionMutation } = api; 
+export const { useGetProductsQuery, useCreateTransactionMutation, useGetTransactionQuery } = api; 
