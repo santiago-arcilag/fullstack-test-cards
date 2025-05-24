@@ -1,18 +1,19 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
-import axios from 'axios';
 
 @Injectable()
 export class TransactionService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateTransactionDto) {
-    // 1. Create pending transaction in DB
+    const product = await this.prisma.product.findUnique({ where: { id: dto.productId } });
+    if (!product) throw new InternalServerErrorException('Product not found');
+
     const transaction = await this.prisma.transaction.create({
       data: {
         productId: dto.productId,
-        amount: 0, // will update after product fetched
+        amount: product.price,
         status: 'PENDING',
         customer: {
           connectOrCreate: {
@@ -21,25 +22,16 @@ export class TransactionService {
           },
         },
       },
-      include: { product: true },
     });
 
-    // compute amount
-    const amount = transaction.product.price;
-    await this.prisma.transaction.update({
-      where: { id: transaction.id },
-      data: { amount },
-    });
-
-    // 2. Call Wompi sandbox (simplified)
     try {
-      // For brevity, we just simulate external call
+      // simulate external payment delay
       await new Promise((res) => setTimeout(res, 500));
-      return await this.prisma.transaction.update({
+      return this.prisma.transaction.update({
         where: { id: transaction.id },
         data: { status: 'SUCCESS' },
       });
-    } catch (e) {
+    } catch {
       await this.prisma.transaction.update({
         where: { id: transaction.id },
         data: { status: 'FAILED' },
