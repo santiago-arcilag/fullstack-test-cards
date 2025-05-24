@@ -18,10 +18,17 @@ export const api = createApi({
         body,
       }),
     }),
+    payTransaction: builder.mutation({
+      query: (body) => ({
+        url: '/transactions/pay',
+        method: 'POST',
+        body,
+      }),
+    }),
     getTransaction: builder.query({
       query: (id) => `/transactions/${id}`,
     }),
   }),
 });
 
-export const { useGetProductsQuery, useCreateTransactionMutation, useGetTransactionQuery } = api; 
+export const { useGetProductsQuery, useCreateTransactionMutation, useGetTransactionQuery, usePayTransactionMutation } = api; 
