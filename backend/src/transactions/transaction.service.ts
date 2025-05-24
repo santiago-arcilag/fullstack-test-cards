@@ -40,4 +40,8 @@ export class TransactionService {
       throw new InternalServerErrorException('Payment failed');
     }
   }
+
+  async findOne(id: number) {
+    return this.prisma.transaction.findUnique({ where: { id } });
+  }
 } 
