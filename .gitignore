@@ -1,0 +1,22 @@
+# Node dependencies
+node_modules/
+.env
+*.log
+
+# Build outputs
+dist/
+coverage/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test PDF (do not commit)
+Wompi FullStack Test (3) (3).pdf
+
+# IDE / editor
+.vscode/
+.idea/
+
+# Misc
+*.local 
